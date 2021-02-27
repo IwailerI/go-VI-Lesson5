@@ -15,5 +15,3 @@
 # vendor/
 .vscode/launch.json
 
-# Вынесено в отдельную репу
-tasks/
