@@ -63,6 +63,7 @@ func main() {
 func handleConnection(con *net.UDPConn) {
 	buf := make([]byte, 2000)
 	n, err := con.Read(buf)
+	fmt.Println("Recieved something")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -75,6 +76,7 @@ func handleConnection(con *net.UDPConn) {
 		fmt.Println(err)
 		return
 	}
+	fmt.Println(data)
 	if data.LastUpdate > points[data.Name].LastUpdate {
 		points[data.Name].erase()
 		points[data.Name] = data
