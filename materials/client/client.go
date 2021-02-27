@@ -6,18 +6,22 @@ import (
 	"net"
 )
 
+type D struct {
+	L   float64
+	Cnt int32
+	A   bool
+}
+
 func main() {
 	conn, err := net.Dial("udp", "127.0.0.1:10234")
 	if err != nil {
 		panic(err)
 	}
 
-	var data struct {
-		L   float64
-		Cnt int32
-	}
+	var data D
 	data.L = 325.54
 	data.Cnt = 34
+	data.A = true
 
 	var buf bytes.Buffer
 	err = binary.Write(&buf, binary.LittleEndian, data)

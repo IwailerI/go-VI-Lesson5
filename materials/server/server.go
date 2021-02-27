@@ -7,6 +7,12 @@ import (
 	"net"
 )
 
+type D struct {
+	L   float64
+	Cnt int32
+	D   bool
+}
+
 func main() {
 	// Get adress
 	adr, err := net.ResolveUDPAddr("udp", "127.0.0.1:10234")
@@ -37,10 +43,7 @@ func handleConnection(con *net.UDPConn) {
 	}
 	buff := bytes.NewReader(buf[:n])
 
-	var data struct {
-		L   float64
-		Cnt int32
-	}
+	var data D
 
 	err = binary.Read(buff, binary.LittleEndian, &data)
 	if err != nil {

@@ -1,10 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"net"
-	"encoding/binary"
-	"bytes"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	}
 
 	var data struct {
-		L float64
+		L   float64
 		Cnt int32
 	}
 	data.L = 325.54

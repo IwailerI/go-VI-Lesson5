@@ -49,7 +49,7 @@ func main() {
 	// 	return
 	// }
 
-	points = make(map[string]point)
+	// points = make(map[string]point)
 
 	// go renderer()
 
@@ -77,11 +77,11 @@ func handleConnection(con *net.UDPConn) {
 		return
 	}
 	fmt.Println(data)
-	if data.LastUpdate > points[data.Name].LastUpdate {
-		points[data.Name].erase()
-		points[data.Name] = data
-		points[data.Name].draw()
-	}
+	// if data.LastUpdate > points[data.Name].LastUpdate {
+	// 	points[data.Name].erase()
+	// 	points[data.Name] = data
+	// 	points[data.Name].draw()
+	// }
 
 }
 
