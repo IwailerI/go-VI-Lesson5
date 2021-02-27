@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"net"
 )
@@ -33,6 +35,18 @@ func handleConnection(con *net.UDPConn) {
 		fmt.Println(err)
 		return
 	}
-	data := string(buf[0:n])
+	buff := bytes.NewReader(buf[:n])
+
+	var data struct {
+		L   float64
+		Cnt int32
+	}
+
+	err = binary.Read(buff, binary.LittleEndian, &data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	fmt.Println(data)
 }
