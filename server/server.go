@@ -13,24 +13,43 @@ import (
 // BG is color of the background
 const BG = termbox.ColorBlack
 
-type point struct {
+// Point contains unpacked data
+type Point struct {
 	X, Y       int
 	Color      termbox.Attribute
 	LastUpdate uint64
-	Name       string
+	ID         uint64
 }
 
-func (p point) draw() {
-	// termbox.SetCell(p.X, p.Y, rune(p.Name[0]), p.Color, BG)
-	fmt.Println("Drawing", p)
+// PointNet is type that can be sent over udp
+type PointNet struct {
+	X, Y       int32
+	Color      uint64
+	LastUpdate uint64
+	ID         uint64
 }
 
-func (p point) erase() {
-	// termbox.SetCell(p.X, p.Y, ' ', 0, BG)
-	fmt.Println("Erasing", p)
+func (pn PointNet) decompress() Point {
+	var p Point
+
+	p.X = int(pn.X)
+	p.Y = int(pn.Y)
+	p.Color = termbox.Attribute(pn.Color)
+	p.LastUpdate = pn.LastUpdate
+	p.ID = pn.ID
+
+	return p
 }
 
-var points map[string]point
+func (p Point) draw() {
+	termbox.SetCell(p.X, p.Y, '#', p.Color, BG)
+}
+
+func (p Point) erase() {
+	termbox.SetCell(p.X, p.Y, ' ', 0, BG)
+}
+
+var points map[uint64]Point
 
 func main() {
 	adr, err := net.ResolveUDPAddr("udp", "127.0.0.1:10245")
@@ -43,17 +62,15 @@ func main() {
 		panic(err)
 	}
 
-	// err = termbox.Init()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
+	err = termbox.Init()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	// points = make(map[string]point)
+	points = make(map[uint64]Point)
 
-	// go renderer()
-
-	fmt.Println("Server started.")
+	go renderer()
 
 	for {
 		handleConnection(listener)
@@ -63,25 +80,24 @@ func main() {
 func handleConnection(con *net.UDPConn) {
 	buf := make([]byte, 2000)
 	n, err := con.Read(buf)
-	fmt.Println("Recieved something")
+	// fmt.Println("Recieved something")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	buff := bytes.NewReader(buf[0:n])
 
-	var data point
+	var data PointNet
 	err = binary.Read(buff, binary.LittleEndian, &data)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(data)
-	// if data.LastUpdate > points[data.Name].LastUpdate {
-	// 	points[data.Name].erase()
-	// 	points[data.Name] = data
-	// 	points[data.Name].draw()
-	// }
+	if data.LastUpdate > points[data.ID].LastUpdate {
+		points[data.ID].erase()
+		points[data.ID] = data.decompress()
+		points[data.ID].draw()
+	}
 
 }
 
