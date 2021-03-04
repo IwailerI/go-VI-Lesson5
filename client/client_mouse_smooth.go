@@ -88,6 +88,8 @@ func main() {
 
 	termbox.SetInputMode(termbox.InputEsc + termbox.InputMouse)
 
+	termbox.SetCell(0, 0, '#', termbox.AttrBold+termbox.ColorWhite, 0)
+
 	drawGui()
 
 	termbox.Flush()
