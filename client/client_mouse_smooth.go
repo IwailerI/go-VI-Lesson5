@@ -101,6 +101,7 @@ func main() {
 	var moving bool
 	var destiX, destiY int
 
+	w, _ := termbox.Size()
 	for {
 		var c termbox.Cell
 		var ev termbox.Event
@@ -146,6 +147,9 @@ func main() {
 			}
 		} else {
 			destiX, destiY = ev.MouseX, ev.MouseY
+			if destiX == w-1 {
+				destiX--
+			}
 			moving = true
 			continue
 		}
