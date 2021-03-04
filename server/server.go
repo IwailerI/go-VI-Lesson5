@@ -94,6 +94,11 @@ func handleConnection(con *net.UDPConn) {
 		return
 	}
 	if data.LastUpdate > points[data.ID].LastUpdate {
+		if data.X < 0 {
+			points[data.ID].erase()
+			delete(points, data.ID)
+			return
+		}
 		points[data.ID].erase()
 		points[data.ID] = data.decompress()
 		points[data.ID].draw()
