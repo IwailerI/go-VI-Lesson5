@@ -1,6 +1,7 @@
 /*
 Basic GUI for client
 You can select colors from the right.
+Click to move
 Everything is updating in real-time
 You can exit programm using "X" in the top right
 */
