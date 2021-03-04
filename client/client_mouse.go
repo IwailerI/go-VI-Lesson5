@@ -103,7 +103,7 @@ func main() {
 
 	for {
 		ev := termbox.PollEvent()
-		if ev.Type != termbox.EventMouse && ev.Key == termbox.MouseLeft {
+		if ev.Type != termbox.EventMouse || ev.Key != termbox.MouseLeft {
 			continue
 		}
 
