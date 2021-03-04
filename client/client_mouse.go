@@ -25,6 +25,7 @@ type Point struct {
 	ID         uint64
 }
 
+// BG contains background color
 const BG = termbox.ColorBlack
 
 func (p Point) draw() {
