@@ -3,35 +3,33 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"net"
 )
-
-type D struct {
-	L   float64
-	Cnt int32
-	A   bool
-}
 
 func main() {
 	conn, err := net.Dial("udp", "127.0.0.1:10234")
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
-	var data D
+	var data struct {
+		L   float64
+		Cnt int32
+		A   []byte
+	}
 	data.L = 325.54
 	data.Cnt = 34
-	data.A = true
+	data.A = []byte{1, 23, 23, 4}
 
 	var buf bytes.Buffer
 	err = binary.Write(&buf, binary.LittleEndian, data)
-	if err != nil {
-		panic(err)
-	}
 
 	_, err = conn.Write(buf.Bytes())
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	conn.Close()
 }
